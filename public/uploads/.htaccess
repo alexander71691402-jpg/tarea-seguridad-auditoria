@@ -1,0 +1,7 @@
+# Seguridad: las imagenes subidas nunca deben ejecutarse como codigo.
+php_flag engine off
+<IfModule mod_php.c>
+    php_admin_flag engine off
+</IfModule>
+RemoveHandler .php .phtml .php3 .php4 .php5 .php7 .php8
+RemoveType .php .phtml .php3 .php4 .php5 .php7 .php8

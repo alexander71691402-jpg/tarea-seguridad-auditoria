@@ -1,0 +1,113 @@
+/* =====================================================================
+ *  Estilos del POS Librería Escolar
+ *  Tipografía: Google Fonts (Poppins + Inter)
+ * ===================================================================== */
+:root {
+    --primary: #4f46e5;
+    --primary-dark: #4338ca;
+    --sidebar-bg: #1e293b;
+    --sidebar-hover: #334155;
+    --bg: #f1f5f9;
+    --card-radius: 14px;
+}
+
+* { box-sizing: border-box; }
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: #1e293b;
+    margin: 0;
+}
+h1, h2, h3, h4, .kpi-value, .sidebar-brand { font-family: 'Poppins', sans-serif; }
+
+/* ---------- Layout general ---------- */
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 250px; background: var(--sidebar-bg); color: #cbd5e1;
+    display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0;
+    transition: transform .25s ease; z-index: 1040;
+}
+.sidebar-brand {
+    display: flex; align-items: center; gap: .6rem; padding: 1.25rem 1.25rem;
+    font-size: 1.25rem; font-weight: 600; color: #fff; border-bottom: 1px solid #334155;
+}
+.sidebar-brand i { color: #818cf8; font-size: 1.6rem; }
+.sidebar-nav { flex-grow: 1; padding: 1rem .75rem; display: flex; flex-direction: column; gap: .25rem; }
+.sidebar-nav .nav-link {
+    color: #cbd5e1; border-radius: 8px; padding: .6rem .85rem; font-size: .95rem;
+    display: flex; align-items: center; gap: .65rem; transition: background .15s;
+}
+.sidebar-nav .nav-link:hover { background: var(--sidebar-hover); color: #fff; }
+.sidebar-nav .nav-link.active { background: var(--primary); color: #fff; font-weight: 500; }
+.sidebar-nav .nav-link i { width: 20px; text-align: center; }
+.sidebar-footer { padding: 1rem; border-top: 1px solid #334155; }
+.user-badge { display: flex; align-items: center; gap: .6rem; color: #e2e8f0; }
+.user-badge i { font-size: 1.8rem; color: #818cf8; }
+.user-badge small { color: #94a3b8; }
+
+.main-area { flex-grow: 1; margin-left: 250px; display: flex; flex-direction: column; min-width: 0; }
+.topbar {
+    background: #fff; padding: .85rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06); position: sticky; top: 0; z-index: 1020;
+}
+.topbar-title { font-size: 1.25rem; margin: 0; flex-grow: 1; }
+.content { padding: 1.5rem; }
+
+/* ---------- Tarjetas / paneles ---------- */
+.panel { border: none; border-radius: var(--card-radius); box-shadow: 0 2px 10px rgba(15,23,42,.05); }
+.panel .card-header { font-weight: 600; border-radius: var(--card-radius) var(--card-radius) 0 0 !important; }
+
+.kpi-card {
+    display: flex; align-items: center; gap: 1rem; background: #fff; padding: 1.1rem 1.25rem;
+    border-radius: var(--card-radius); box-shadow: 0 2px 10px rgba(15,23,42,.05); height: 100%;
+}
+.kpi-icon { width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; font-size: 1.5rem; color: #fff; flex-shrink: 0; }
+.kpi-value { font-size: 1.5rem; font-weight: 700; line-height: 1.1; }
+.kpi-label { color: #64748b; font-size: .85rem; }
+.kpi-primary .kpi-icon { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.kpi-success .kpi-icon { background: linear-gradient(135deg, #34d399, #10b981); }
+.kpi-info    .kpi-icon { background: linear-gradient(135deg, #38bdf8, #0ea5e9); }
+.kpi-warning .kpi-icon { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+/* ---------- Inventario ---------- */
+.prod-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
+.placeholder-thumb { display: grid; place-items: center; background: #e2e8f0; color: #94a3b8; }
+
+/* ---------- POS ---------- */
+.pos-layout { min-height: calc(100vh - 130px); }
+.pos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: .75rem; align-content: start; max-height: calc(100vh - 200px); overflow: auto; }
+.pos-item {
+    border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; padding: .75rem; text-align: left;
+    cursor: pointer; transition: all .15s; display: flex; flex-direction: column; gap: .2rem;
+}
+.pos-item:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(79,70,229,.15); transform: translateY(-2px); }
+.pos-item.agotado { opacity: .5; cursor: not-allowed; }
+.pos-item-nombre { font-weight: 600; font-size: .9rem; line-height: 1.2; }
+.pos-item-precio { color: var(--primary); font-weight: 700; }
+.pos-item-stock { font-size: .78rem; }
+.totales { font-size: .95rem; }
+.total-grande { font-size: 1.3rem; font-weight: 700; color: #0f172a; }
+
+/* ---------- Login ---------- */
+.login-page {
+    min-height: 100vh; display: grid; place-items: center;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 1rem;
+}
+.login-card { background: #fff; border-radius: 18px; padding: 2.5rem; width: 100%; max-width: 410px; }
+.login-brand { text-align: center; margin-bottom: 1.5rem; }
+.login-brand i { font-size: 2.5rem; color: var(--primary); }
+.login-brand h2 { font-size: 1.4rem; margin: .5rem 0 0; }
+.login-brand p { color: #64748b; margin: 0; }
+.login-hint { margin-top: 1.25rem; padding: .75rem; background: #f1f5f9; border-radius: 8px; font-size: .8rem; color: #475569; text-align: center; }
+
+/* ---------- Botones ---------- */
+.btn-primary { background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main-area { margin-left: 0; }
+}

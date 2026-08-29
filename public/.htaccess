@@ -1,0 +1,13 @@
+# Enruta todas las peticiones al front controller (index.php),
+# excepto archivos y carpetas que existan realmente (assets, uploads).
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # No reescribir si el archivo o directorio existe fisicamente
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Todo lo demas pasa por index.php
+    RewriteRule ^ index.php [L]
+</IfModule>

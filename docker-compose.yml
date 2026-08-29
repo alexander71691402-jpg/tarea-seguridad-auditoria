@@ -1,0 +1,41 @@
+# =====================================================================
+#  Entorno de desarrollo local (equivalente a Railway):
+#    - web:  aplicación PHP + Apache (Dockerfile)
+#    - db:   MySQL 8, carga automáticamente database/pos_libreria.sql
+#
+#  Uso:   docker compose up --build
+#  App:   http://localhost:8080
+# =====================================================================
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pos_libreria
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./database/pos_libreria.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: pos_libreria
+      DB_USER: root
+      DB_PASSWORD: root
+    ports:
+      - "8090:80"
+
+volumes:
+  db_data:

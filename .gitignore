@@ -1,0 +1,22 @@
+# Entorno
+.env
+.env.local
+
+# Dependencias
+/vendor/
+
+# Imágenes subidas por usuarios (se conserva la carpeta con .gitkeep)
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/public/uploads/.htaccess
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+*.swp
+
+# Documento original de la tarea
+Tarea_POS_Web.docx

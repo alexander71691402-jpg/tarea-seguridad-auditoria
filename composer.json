@@ -1,0 +1,16 @@
+{
+    "name": "umg/pos-libreria",
+    "description": "Sistema de Punto de Venta (POS) Web para Libreria y Papeleria Escolar - UMG Seguridad y Auditoria de Sistemas",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "config": {
+        "platform": {
+            "php": "8.3.0"
+        }
+    }
+}

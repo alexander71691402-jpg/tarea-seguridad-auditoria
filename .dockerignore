@@ -1,0 +1,9 @@
+.git
+.gitignore
+docker-compose.yml
+*.md
+docs/
+Tarea_POS_Web.docx
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/.htaccess
