@@ -1,7 +1,12 @@
 # Guía de Despliegue en Railway.app
 
 Objetivo: dejar la aplicación accesible públicamente con base de datos en la nube.
-Railway detecta automáticamente el `Dockerfile` del proyecto.
+Railway debe construir con el **`Dockerfile`** del proyecto (no con Nixpacks).
+
+> ⚠️ **IMPORTANTE:** el archivo `railway.json` fuerza a Railway a usar el
+> `Dockerfile`. Si Railway usa su detector automático (Nixpacks), Apache falla
+> con el error `AH00534: se ha cargado más de un MPM`. Ver la sección de
+> **Solución de problemas** al final.
 
 ---
 
@@ -79,6 +84,36 @@ Usar la pestaña **Data** del servicio MySQL en Railway y pegar el contenido del
 
 Si prefieres no usar Docker, Railway también soporta PHP con Nixpacks, pero el
 `Dockerfile` incluido es la forma más predecible y es la recomendada para esta entrega.
+
+## 🛠️ Solución de problemas
+
+### Error `AH00534: apache2: se ha cargado más de un MPM` (crash-loop)
+
+**Causa:** Railway está construyendo con **Nixpacks** (su detector automático,
+que se activa al ver `composer.json`) en lugar de con nuestro `Dockerfile`. La
+configuración de Apache que genera Nixpacks carga dos MPM a la vez y Apache no
+arranca, reiniciándose una y otra vez.
+
+**Solución (definitiva):** obligar a Railway a usar el `Dockerfile`.
+
+1. Asegurarse de que el repo tiene `railway.json` con:
+   ```json
+   { "build": { "builder": "DOCKERFILE", "dockerfilePath": "Dockerfile" } }
+   ```
+2. En Railway → servicio **web** → **Settings** → **Build**:
+   - En **Builder**, seleccionar **Dockerfile** (no Nixpacks).
+3. Hacer **Redeploy** (o `Deploy` del último commit).
+4. En los logs debe aparecer:
+   `mpm_prefork:notice ... Apache/2.4 ... resuming normal operations`
+   y **ya no** el error de MPM.
+
+> Nuestro `Dockerfile` además desactiva explícitamente `mpm_event`/`mpm_worker`
+> y deja solo `mpm_prefork`, así que con el builder correcto el error desaparece.
+
+**Verificado localmente:** con el `Dockerfile` del proyecto, Apache carga un solo
+MPM (`mpm_prefork`) y responde HTTP 200 sin errores.
+
+---
 
 ## Nota sobre las imágenes de productos
 
