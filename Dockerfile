@@ -6,7 +6,11 @@ FROM php:8.3-apache
 
 # Extensiones de PHP necesarias para MySQL
 RUN docker-php-ext-install pdo_mysql mysqli \
-    && a2enmod rewrite
+    && a2enmod rewrite \
+    # Garantizar que solo se cargue UN MPM (prefork) para evitar el
+    # error "AH00534: se ha cargado más de un MPM".
+    && a2dismod mpm_event mpm_worker 2>/dev/null || true \
+    && a2enmod mpm_prefork
 
 # El document root es la carpeta public/
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

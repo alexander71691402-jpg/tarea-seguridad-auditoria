@@ -25,6 +25,14 @@ function nav_active(string $frag, string $actual): string
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <link href="<?= base_url('/assets/css/styles.css') ?>" rel="stylesheet">
+
+    <!-- Variables globales + utilidades (deben cargar ANTES de los scripts
+         de cada vista, que usan api(), money(), etc.) -->
+    <script>
+        window.BASE_URL = "<?= base_url('') ?>".replace(/\/$/, '');
+        window.USER_ROL = "<?= e($user['rol'] ?? '') ?>";
+    </script>
+    <script src="<?= base_url('/assets/js/app.js') ?>"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -81,10 +89,5 @@ function nav_active(string $frag, string $actual): string
 <!-- Bootstrap JS + Chart.js (API externa para gráficas) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script>
-    window.BASE_URL = "<?= base_url('') ?>".replace(/\/$/, '');
-    window.USER_ROL = "<?= e($user['rol'] ?? '') ?>";
-</script>
-<script src="<?= base_url('/assets/js/app.js') ?>"></script>
 </body>
 </html>

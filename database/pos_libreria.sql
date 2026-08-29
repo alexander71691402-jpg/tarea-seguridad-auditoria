@@ -189,38 +189,36 @@ INSERT INTO clientes (nombre, nit, correo, telefono, direccion) VALUES
 
 -- Ventas de ejemplo (para que el dashboard y reportes muestren datos)
 INSERT INTO ventas (id_usuario, id_cliente, fecha, subtotal, iva, descuento, total, metodo_pago, estado) VALUES
-(2, 2, DATE_SUB(NOW(), INTERVAL 20 DAY), 55.00, 6.60, 0.00, 61.60, 'efectivo', 'completada'),
-(2, 1, DATE_SUB(NOW(), INTERVAL 12 DAY), 46.00, 5.52, 0.00, 51.52, 'tarjeta',  'completada'),
-(1, 3, DATE_SUB(NOW(), INTERVAL 5 DAY),  370.00, 44.40, 20.00, 394.40, 'QR',    'completada'),
-(2, 4, DATE_SUB(NOW(), INTERVAL 2 DAY),  28.00, 3.36, 0.00, 31.36, 'efectivo', 'completada'),
-(2, 1, DATE_SUB(NOW(), INTERVAL 1 DAY),  120.00, 14.40, 0.00, 134.40, 'tarjeta','completada'),
-(1, 2, NOW(),                            18.50, 2.22, 0.00, 20.72, 'efectivo', 'completada');
+(2, 2, DATE_SUB(NOW(), INTERVAL 20 DAY), 44.00,  5.28,  0.00,  49.28,  'efectivo', 'completada'),
+(2, 1, DATE_SUB(NOW(), INTERVAL 12 DAY), 45.00,  5.40,  0.00,  50.40,  'tarjeta',  'completada'),
+(1, 3, DATE_SUB(NOW(), INTERVAL 5 DAY),  350.00, 39.60, 20.00, 369.60, 'QR',       'completada'),
+(2, 4, DATE_SUB(NOW(), INTERVAL 2 DAY),  28.00,  3.36,  0.00,  31.36,  'efectivo', 'completada'),
+(2, 1, DATE_SUB(NOW(), INTERVAL 1 DAY),  120.00, 14.40, 0.00,  134.40, 'tarjeta',  'completada'),
+(1, 2, NOW(),                            40.50,  4.86,  0.00,  45.36,  'efectivo', 'completada');
 
--- Detalle de las ventas de ejemplo
+-- Detalle de las ventas de ejemplo (cada linea coincide con su cabecera)
 INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES
--- Venta 1
-(1, 5, 1, 32.00, 32.00),
-(1, 4, 1, 18.50, 18.50),
-(1, 6, 1, 8.00,  8.00),
--- Venta 2 (Ortografia + corrector)
+-- Venta 1 (cuadernos + lapiceros)
+(1, 4, 2, 18.50, 37.00),
+(1, 7, 2, 3.50,  7.00),
+-- Venta 2 (libro de ortografia)
 (2, 2, 1, 45.00, 45.00),
-(2, 4, 0, 9.50,  0.00),
--- Venta 3 (Colegio: mochila + calculadora + temperas)
+-- Venta 3 (Colegio: mochila + calculadora, con descuento)
 (3, 18, 1, 185.00, 185.00),
 (3, 20, 1, 165.00, 165.00),
-(3, 16, 0, 38.00,  0.00),
--- Venta 4 (caja lapices)
+-- Venta 4 (caja de lapices)
 (4, 8, 1, 28.00, 28.00),
 -- Venta 5 (atlas)
 (5, 3, 1, 120.00, 120.00),
--- Venta 6 (cuaderno)
-(6, 4, 1, 18.50, 18.50);
+-- Venta 6 (cuaderno + crayones)
+(6, 4,  1, 18.50, 18.50),
+(6, 15, 1, 22.00, 22.00);
 
--- Pagos correspondientes
+-- Pagos correspondientes (monto = total de la venta)
 INSERT INTO pagos (id_venta, monto, metodo, referencia_api, fecha) VALUES
-(1, 61.60,  'efectivo', NULL, DATE_SUB(NOW(), INTERVAL 20 DAY)),
-(2, 51.52,  'tarjeta',  NULL, DATE_SUB(NOW(), INTERVAL 12 DAY)),
-(3, 394.40, 'QR',       'QR-REF-000003', DATE_SUB(NOW(), INTERVAL 5 DAY)),
+(1, 49.28,  'efectivo', NULL, DATE_SUB(NOW(), INTERVAL 20 DAY)),
+(2, 50.40,  'tarjeta',  NULL, DATE_SUB(NOW(), INTERVAL 12 DAY)),
+(3, 369.60, 'QR',       'QR-REF-000003', DATE_SUB(NOW(), INTERVAL 5 DAY)),
 (4, 31.36,  'efectivo', NULL, DATE_SUB(NOW(), INTERVAL 2 DAY)),
 (5, 134.40, 'tarjeta',  NULL, DATE_SUB(NOW(), INTERVAL 1 DAY)),
-(6, 20.72,  'efectivo', NULL, NOW());
+(6, 45.36,  'efectivo', NULL, NOW());
