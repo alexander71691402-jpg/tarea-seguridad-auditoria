@@ -102,6 +102,9 @@ route('GET',  '/usuarios',   'web_usuarios');         // solo admin
 /*  API REST PROPIA  (todas responden JSON)                            */
 /* ================================================================== */
 
+// --- Diagnostico de despliegue (solo nombres de variables, sin valores) ---
+route('GET',  '/api/diag/env',      'api_diag_env');
+
 // --- Autenticacion ---
 route('POST', '/api/auth/login',    'api_auth_login');
 route('POST', '/api/auth/register', 'api_auth_register');
