@@ -20,6 +20,15 @@ date_default_timezone_set('America/Guatemala');
 if (!function_exists('env')) {
     function env(string $key, ?string $default = null): ?string
     {
+        // Se consultan las tres fuentes porque, segun el SAPI y el
+        // variables_order del php.ini, una variable inyectada por Docker
+        // puede aparecer en $_ENV, en $_SERVER o solo en getenv().
+        foreach ([$_ENV, $_SERVER] as $source) {
+            if (isset($source[$key]) && $source[$key] !== '') {
+                return (string) $source[$key];
+            }
+        }
+
         $value = getenv($key);
         if ($value === false || $value === '') {
             return $default;
@@ -50,6 +59,14 @@ $config = [
         'qr_api'   => 'https://api.qrserver.com/v1/create-qr-code/',
     ],
 ];
+
+// Se recuerda si la configuracion viene de variables de entorno reales o de
+// los valores por defecto de desarrollo, para poder dar un error util cuando
+// el despliegue no tiene las variables enlazadas.
+$config['db']['from_env'] = env('MYSQLHOST') !== null
+    || env('DB_HOST') !== null
+    || env('MYSQL_URL') !== null
+    || env('DATABASE_URL') !== null;
 
 // Si Railway entrega una sola URL de conexion, la parseamos.
 $mysqlUrl = env('MYSQL_URL') ?? env('DATABASE_URL');
