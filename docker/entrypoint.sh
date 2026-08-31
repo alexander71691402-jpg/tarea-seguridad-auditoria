@@ -7,6 +7,16 @@
 # =====================================================================
 set -eu
 
+# ---------------------------------------------------------------------
+#  Red de seguridad contra AH00534 ("More than one MPM loaded").
+#  El Dockerfile ya deja un unico MPM, pero si la imagen se reconstruye
+#  con capas cacheadas o alguien habilita mpm_event por fuera, aqui se
+#  vuelve a forzar prefork (el unico compatible con mod_php).
+# ---------------------------------------------------------------------
+rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf
+ln -s ../mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
+ln -s ../mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+
 PORT="${PORT:-80}"
 
 echo "Listen ${PORT}" > /etc/apache2/ports.conf
