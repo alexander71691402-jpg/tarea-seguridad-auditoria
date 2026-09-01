@@ -26,4 +26,7 @@ sed "s/__PORT__/${PORT}/g" /etc/apache2/vhost.conf.tpl \
 echo "[entrypoint] Apache escuchando en el puerto ${PORT}"
 echo "[entrypoint] MPM cargado: $(ls /etc/apache2/mods-enabled/ | grep '^mpm_.*\.load$' | tr '\n' ' ')"
 
+# Carga inicial del esquema si la base esta vacia (no aborta el arranque).
+php /var/www/html/docker/migrate.php || true
+
 exec apache2-foreground "$@"
