@@ -68,10 +68,27 @@ $config['db']['from_env'] = env('MYSQLHOST') !== null
     || env('MYSQL_URL') !== null
     || env('DATABASE_URL') !== null;
 
+// Que variable aporto la configuracion, para poder decirlo en los errores
+// sin tener que exponer host ni credenciales.
+$config['db']['origen'] = 'valores por defecto de desarrollo';
+foreach (['MYSQLHOST', 'DB_HOST', 'DATABASE_URL', 'MYSQL_URL'] as $candidata) {
+    if (env($candidata) !== null) {
+        $config['db']['origen'] = $candidata;
+    }
+}
+
 // Si Railway entrega una sola URL de conexion, la parseamos.
 $mysqlUrl = env('MYSQL_URL') ?? env('DATABASE_URL');
 if ($mysqlUrl) {
     $parts = parse_url($mysqlUrl);
+
+    // Una referencia de Railway sin resolver (`${{MySQL.MYSQL_URL}}`) llega
+    // como texto literal: parse_url no le encuentra host y la conexion acaba
+    // yendo al 127.0.0.1 por defecto. Se marca para poder avisarlo.
+    if ($parts === false || empty($parts['host'])) {
+        $config['db']['url_sin_host'] = true;
+    }
+
     if ($parts !== false) {
         $config['db']['host']     = $parts['host'] ?? $config['db']['host'];
         $config['db']['port']     = isset($parts['port']) ? (string) $parts['port'] : $config['db']['port'];
