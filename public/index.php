@@ -18,6 +18,60 @@ foreach (glob(__DIR__ . '/../app/controllers/*.php') as $controller) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Manejo global de errores                                          */
+/*                                                                    */
+/*  Una excepcion sin capturar imprimia la traza completa al visitante:*/
+/*  rutas del servidor, nombres de tablas y fragmentos de SQL. Eso es  */
+/*  informacion util para un atacante, asi que el detalle se manda al  */
+/*  log (visible en Railway) y al cliente solo le llega un mensaje     */
+/*  generico. Con APP_DEBUG=1 se muestra el detalle, para desarrollo.  */
+/* ------------------------------------------------------------------ */
+$appDebug = in_array(
+    strtolower((string) getenv('APP_DEBUG')),
+    ['1', 'true', 'on', 'yes'],
+    true
+);
+
+ini_set('display_errors', $appDebug ? '1' : '0');
+ini_set('log_errors', '1');
+
+set_exception_handler(static function (Throwable $e) use ($appDebug): void {
+    error_log(sprintf(
+        '[app] %s: %s en %s:%d',
+        get_class($e),
+        $e->getMessage(),
+        $e->getFile(),
+        $e->getLine()
+    ));
+
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+
+    $esApi = str_contains((string) ($_SERVER['REQUEST_URI'] ?? ''), '/api/');
+    $detalle = $appDebug ? $e->getMessage() : null;
+
+    if ($esApi) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'ok'      => false,
+            'mensaje' => 'Error interno del servidor.',
+            'detalle' => $detalle,
+        ], JSON_UNESCAPED_UNICODE);
+        return;
+    }
+
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!doctype html><meta charset="utf-8">'
+        . '<title>Error interno</title>'
+        . '<p>Ha ocurrido un error interno. Intentelo de nuevo mas tarde.</p>';
+
+    if ($detalle !== null) {
+        echo '<pre>' . htmlspecialchars($detalle, ENT_QUOTES, 'UTF-8') . '</pre>';
+    }
+});
+
+/* ------------------------------------------------------------------ */
 /*  Calculo de la ruta solicitada (relativa al directorio base)        */
 /* ------------------------------------------------------------------ */
 $scriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/');
